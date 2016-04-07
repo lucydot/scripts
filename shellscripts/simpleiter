@@ -1,0 +1,13 @@
+#!/bin/bash -x
+
+for material in {CdTe,GaAs,Si,CH3NH3PbI3,Cu2ZnSnS4}; do 
+	for xc in {gga,lda,hybrid}; do
+		#change to directory
+		cd /home/lucy/crimbo_calcs/$material/$xc/
+		#run VASP!
+		ulimit -s unlimited
+		module load vasp
+		mpirun -np 8 vasp_std
+	done
+done
+

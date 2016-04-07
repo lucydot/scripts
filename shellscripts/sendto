@@ -1,0 +1,30 @@
+#! /bin/bash
+
+################################################################################
+#                                                                              #
+# sendto: a shell script for syncronising folder to external servers           #
+#                                                                              #
+################################################################################
+
+# Set flags to empty
+directory= address= 
+case $1 in 
+    *) directory="/Users/lucywhalley/data/all/$1"
+        ;;
+    esac
+   # shift    # Shift arguments to examine next argument
+
+case $2 in
+    balena) address="lw827@balena.bath.ac.uk:/home/o/lw827/jobs"
+	;;
+    cobalt) address="lucy@chpc-cobalt.bath.ac.uk:/home/lucy/jobs/"
+	;;
+    archer) address="lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/"
+        ;;
+esac
+
+echo " $1"
+
+########### Send files with rsync ##############
+echo "Sending $directory to $address "
+rsync -avzu "$directory" "$address"

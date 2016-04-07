@@ -1,0 +1,27 @@
+#! /bin/bash
+### Fetch research data from remote servers ###
+# Construct an exclude.tmp list for rsync
+cat > exclude.tmp <<EOF
+oq#cq <--- this is an Rsync comment (I know, crazy eh?)
+oq#cq Standard VASP big files
+*WAVECAR*
+*LOCPOT*
+vasprun.xml
+*XDATCAR*
+oq#cq General unix core-dumps (crashed program memory contents)
+*tar*
+*tgz*
+core*
+EOF
+# Echo the contents to the user
+echo "I am excluding from backup: "
+cat exclude.tmp
+
+echo "Fetching work from Balena"
+rsync -avzu --exclude-from 'exclude.tmp' lw827@balena.bath.ac.uk:/home/o/lw827/jobs/ ~/data/all 
+
+echo "Fetching work from Cobalt"
+rsync -avzu --exclude-from 'exclude.tmp' lucy@chpc-cobalt.bath.ac.uk:/home/lucy/jobs/ ~/data/all
+
+echo "Fetching work from Archer"
+rsync -avzu --exclude-from 'exclude.tmp' lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/ ~/data/all

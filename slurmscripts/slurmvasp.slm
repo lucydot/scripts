@@ -1,0 +1,29 @@
+#!/bin/sh
+
+#SBATCH --account=free
+
+#SBATCH --job-name=MAPIhybrid
+#SBATCH --output=StdOut.o.%j
+#SBATCH --error=StdErr.e.%j
+
+#SBATCH --nodes=4
+#SBATCH --ntasks-per-node=4
+#SBATCH --partition=batch
+
+#SBATCH --time=04:00:00
+
+#SBATCH --mail-type=END
+#SBATCH --mail-user=lw827@bath.ac.uk
+
+. /etc/profile.d/modules.sh
+
+module purge
+module load intel/compiler intel/mkl slurm openmpi/intel vasp
+
+export OMP_NUM_THREADS=1
+
+srun hostname -s | sort -n > machinefile
+
+mpirun -np $SLURM_NTASKS --machinefile machinefile vasp.standard > vasp.init
+
+
