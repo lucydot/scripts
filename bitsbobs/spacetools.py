@@ -57,17 +57,6 @@ def transform_space(a_in, b_in, c_in, space, scaling=1):
               'c_length': c_in_length if real else c_out_length}
     return values
 
-def print_to_screen(values):
-    """ prints dictionary keys and values to screen
-    """
-      
-    for key, value in sorted(values.items()):
-        if type(value) == numpy.ndarray:
-            value = array_to_list(value)
-        if type(value) == float:
-            value = round(value, 7)
-        print (key, "=", value)
-
 def calculate_distance(a_star_length,b_star_length,c_star_length, 
                        high_symmetry_point):
     """ Takes high symmetry point in reciprocol space as 
@@ -95,6 +84,35 @@ def calculate_sampling_distance(number_kpoints, distance):
     """
     values['sampling_distance'] = distance / number_kpoints
     return values    
+
+
+def print_to_screen(values):
+    """ prints dictionary keys and values to screen
+    """
+      
+    for key, value in sorted(values.items()):
+        if type(value) == numpy.ndarray:
+            value = array_to_list(value)
+        if type(value) == float:
+            value = round(value, 7)
+        print (key, "=", value)
+
+def calculate_direction(a, b):
+    """ Takes two 1x3 numpy arrays. Returns the direction between
+    them.
+    """
+    # we need to find the smallest none-zero value within a-b
+    # return array with invalid entries where values are equal
+    direction_masked = np.ma.masked_equal(a - b, 0)
+    # fill invalid elements of array with a large number s
+    direction_filled = np.ma.filled(direction_masked, 10**6)
+    # return absolute values of each element 
+    direction_absolute = np.absolute(direction_filled)
+    smallest = np.amin(direction_absolute)
+
+    # use the minimum absolute value as a divisor a-b
+    direction = a - b / smallest
+    return direction
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""A program for moving 
