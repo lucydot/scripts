@@ -122,7 +122,6 @@ def calculate_direction(a, b):
     # return absolute values of each element 
     direction_absolute = numpy.absolute(direction_filled)
     smallest = numpy.amin(direction_absolute)
-    print (smallest)
     # use the minimum absolute value as a divisor a-b
     direction = (b - a) / smallest
     return direction
