@@ -12,9 +12,11 @@ import argparse
 from IPython import embed
 
 def vector_length(vector):
-    """ Takes a 3x1 array and returns a length
+    """ Takes a 3x1 array and scaling factor, returns a length
     """
-    length =  numpy.sqrt((vector[0]**2)+(vector[1]**2)+(vector[2]**2))
+    length =  numpy.sqrt((vector[0]**2)+
+                         (vector[1]**2)+
+                         (vector[2]**2))
     length = round(length, 7)
     return length
 
@@ -23,12 +25,14 @@ def array_to_list(array):
     aslist = formatted_array.tolist()
     return aslist
 
-
 def transform_space(a_in, b_in, c_in, space, scaling=1):
     """ Takes three 3x1 arrays, input space (real/reciprocal)
     and <optional> scaling. Returns three 3x1 arrays
     for transformed space (reciprocal/real) and all vector legnths
     """
+    a_in = [i*scaling for i in a_in]
+    b_in = [i*scaling for i in b_in]
+    c_in = [i*scaling for i in c_in]
     a_in_length, b_in_length, c_in_length = (
                                             vector_length(a_in), 
                                             vector_length(b_in), 
@@ -129,7 +133,9 @@ def calculate_direction(a, b):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""A program for moving 
-    between real and reciprocal space""")
+    between real and reciprocal space. Minimum usage: Input space (real 
+    or reciprocal) and vectors. Vectors in transformed space and all
+    corresponding lengths will be given.""")
     parser.add_argument( '--space', '-s', type=str, required=True,
                         help="""<required> space of input vector""", 
                         choices=['real', 'reciprocal'])
