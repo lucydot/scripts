@@ -9,6 +9,7 @@ are angstroms (in real space) and 1/angstroms (in reciprocal space).
 import numpy
 import numpy.ma
 import argparse
+from IPython import embed
 
 def vector_length(vector):
     """ Takes a 3x1 array and returns a length
@@ -135,7 +136,7 @@ if __name__ == "__main__":
     parser.add_argument('--vectors', '-v', type=str, required=True,
                         help="""<required> input lattice vectors""",
                         nargs=3,
-                        metavar='abc'
+                        metavar='a,b,c'
                         )
     parser.add_argument('-p', '--high_symmetry_point', type=float, 
                         metavar='0.5',
@@ -159,9 +160,13 @@ if __name__ == "__main__":
    
     high_symmetry_point = numpy.array(args.high_symmetry_point)
     
-    a_in = [int(x) for x in args.vectors[0]]
-    b_in = [int(x) for x in args.vectors[1]]
-    c_in = [int(x) for x in args.vectors[2]]
+    a_in = args.vectors[0]
+    b_in = args.vectors[1]
+    c_in = args.vectors[2]
+
+    a_in = [float(x) for x in a_in.split(",")]
+    b_in = [float(x) for x in b_in.split(",")]
+    c_in = [float(x) for x in c_in.split(",")]
     
     values = transform_space(a_in, b_in, c_in, 
                     args.space, scaling=args.scaling)
