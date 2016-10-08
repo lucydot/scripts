@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+JOBS=/work/e05/e05/lucy/jobs
+STRUCTURES=/work/e05/e05/lucy/jobs/EPHybrid/Structures/*
+FILES=/work/e05/e05/lucy/jobs/EPHybrid
+JOBNUMBER=108
+		
+for s in $STRUCTURES
+do
+    echo "Processing $s Structure..."
+    mkdir $JOBS/$JOBNUMBER
+    cp $s $JOBS/$JOBNUMBER/
+    cp $s $JOBS/$JOBNUMBER/POSCAR
+    cp $FILES/{POTCAR,INCAR,KPOINTS,submit.pbs} $JOBS/$JOBNUMBER/
+    JOBNUMBER=$((JOBNUMBER+1))
+done

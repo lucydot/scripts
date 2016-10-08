@@ -51,10 +51,9 @@ BandPaths = [
                 
                 ## Simple cubic
                 ((0.0, 0.0, 0.0), r"$\Gamma$"),
+                ((0.5, 0.5, 0.5), "R"),
                 ((0.0, 0.5, 0.0), "X"),
                 ((0.5, 0.5, 0.0), "M"),
-                ((0.0, 0.0, 0.0),r"$\Gamma$"),
-                ((0.5, 0.5, 0.5), "R"),
                 ((0.0, 0.5, 0.0), "X")
 		],
 #	 [
@@ -208,7 +207,7 @@ plt.ylim((-5, 5)); # change to plot over larger energy interval
 plt.xticks(specialPointDistances, specialPointLabels);
 plt.yticks([-5.0, -2.5, 0, 2.5, 5]);
 
-plt.xlabel("Wavevector") # 
+plt.xlabel("Wave vector k") # 
 plt.ylabel ("Energy (eV)") # you can use latex (r"$\mathit{E - E_F}$ / eV")
 # plt.title ("CZTS hybrid", fontweight = 'bold')
 axes = plt.gca();

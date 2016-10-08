@@ -19,7 +19,9 @@ case $2 in
 	;;
     cobalt) address="lucy@chpc-cobalt.bath.ac.uk:/home/lucy/jobs/"
 	;;
-    archer) address="lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/"
+    archer) address="lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/"
+    ;;
+    archerdot) address="lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/"
         ;;
 esac
 

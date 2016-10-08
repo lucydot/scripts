@@ -4,7 +4,7 @@ import re
 import argparse
 
 parser = argparse.ArgumentParser(description='Plot energy convergence')
-parser.add_argument('-t', '--type', default='ionic', help='Select electronic or ionic convergence (default:ionic)')
+parser.add_argument('-t', '--type', default='electronic', help='Select electronic or ionic convergence (default:electronic)')
 args = vars(parser.parse_args())
 
 read_in = open('OUTCAR','r').read()
@@ -20,6 +20,5 @@ if args['type'] == 'ionic':
 x_coords = range(1, len(free_energies)+1)
 
 print free_energies
-
-sc = plt.scatter(x_coords,free_energies)
-plt.show() 
+plt.scatter(x_coords,free_energies)
+plt.savefig('convergence.png') 
