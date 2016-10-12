@@ -9,7 +9,7 @@
 # Set flags to empty
 directory= address= 
 case $1 in 
-    *) directory="/Users/lucywhalley/data/all/$1"
+    *) directory="/Users/lucydot/data/all/$1"
         ;;
     esac
    # shift    # Shift arguments to examine next argument
