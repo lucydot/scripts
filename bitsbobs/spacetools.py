@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 """ 
 Functions to help moving between real and reciprocal space. When runnning
@@ -106,7 +106,7 @@ def print_to_screen(values):
             value = str(round(value, 7))
         if type(value) == list:
             value = str(value)
-        print (key + " = " + value)
+        print (str(key) + " = " + str(value))
 
 def calculate_direction(a, b):
     """ Takes two k points as 1x3 lists ([a,b,c],[a,b,c]). Returns 
