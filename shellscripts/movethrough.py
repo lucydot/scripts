@@ -5,8 +5,8 @@ import os
 from IPython import embed
 import re
 
-folder = "/Users/lucywhalley/data/all/111/"
-mode = "R"
+folder = "/Users/lucydot/data/all/149/"
+mode = "M"
 numbers = (1,2,3,4,5,6,7,10,11,12,13)
 
 VBM=[]
@@ -31,7 +31,7 @@ for n in numbers:
 
 
 os.chdir(folder)
-newfolder="movethrough_results"
+newfolder="Analysis"
 os.system("mkdir "+newfolder)
 os.chdir(folder+newfolder)
 

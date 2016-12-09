@@ -1,0 +1,35 @@
+SYSTEM = Hybrid SOC self-consistent (CdTe: 216 KPTS, 18 elec, 2 ions, 8 nodes )
+
+!!ICHARG  =  11  (Non-selfconsistent for band structures)
+LREAL = .FALSE. (projection in reciprocal space)
+
+LCHARG = .FALSE. (CHGCAR not written)
+LWAVE = .FALSE. (WAVECAR not written)
+ICORELEVEL = 1 (Print core levels in OUTCAR)
+
+PREC = Accurate (Precision level for FFT grid)
+ENCUT = 500.00 (Plane-wave cutoff)
+EDIFF = 1E-06 (SCF convergence criteria)
+
+!!NELMIN = 5 (Force steps for band structures)
+NSW = 0 (Max ionic steps)
+
+ISMEAR = 0  (Gaussian smearing)
+SIGMA  = 0.001 (Smearing value in eV)
+
+LORBIT = 10  (PAW radii for projected DOS)
+
+ISYM = 0 (Turn off symmetry for SoC calculations)
+LSORBIT = .TRUE. (Turn on SoC)
+ISPIN = 1 (Closed shell: 1, Spin Polarised: 2)
+
+NBANDS  = 16 (Set number of bands)
+NPAR = 8 (# compute node) 
+KPAR = 1
+
+GGA = PS (PBEsol generalised gradient approcimation)
+LHFCALC = .TRUE. (Activate HF)
+PRECFOCK = Fast   (HF FFT grid)
+ALGO = All    (SCF Combo; ALGO=58)
+HFSCREEN = 0.207  (Screened exchange; e.g. HSE06)
+AEXX = 0.25   (25% HF exchange; e.g. PBE0)

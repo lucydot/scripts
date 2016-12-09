@@ -6,12 +6,12 @@ oq#cq <--- this is an Rsync comment (I know, crazy eh?)
 oq#cq Standard VASP big files
 *WAVECAR*
 *LOCPOT*
-vasprun.xml
+*vasprun.xml*
 *XDATCAR*
 oq#cq General unix core-dumps (crashed program memory contents)
 *tar*
 *tgz*
-core*
+*core*
 EOF
 # Echo the contents to the user
 echo "I am excluding from backup: "
@@ -27,7 +27,7 @@ cat exclude.tmp
 #rsync -avzu --exclude-from 'exclude.tmp' lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/ ~/data/all
 
 echo "Fetching work from Archer"
-rsync -avzu --exclude-from 'exclude.tmp' lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data/all
+rsync -avzu --exclude-from 'exclude.tmp' lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data
 
 #echo "Fetching work from Frisc"
 #rsync -avzu --exclude-from 'exclude.tmp' pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs/ ~/data/all

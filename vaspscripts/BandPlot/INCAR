@@ -1,0 +1,83 @@
+SYSTEM = Name
+!Start Parameters
+ ISTART     = 1     (Read existing wavefunction, if present)
+ INIWAV     = 1     (Random initial wavefunction)
+ ICORELEVEL = 1     (Print core levels in OUTCAR)
+ LREAL = .FALSE.
+ !!NGX        = 500   (FFT grid mesh density)
+ !!NGY        = 500   (FFT grid mesh density)
+ !!NGZ        = 500   (FFT grid mesh density)
+ ICHARG   =  11   (Non-selfconsistent: band structures)
+ !!NELECT   = 352   (Number of electrons: charged cells)
+ NBANDS   = 34   (Increase number of bands)
+
+!Parallel Options
+ !!LPLANE = .TRUE.   (Real space distribution)
+ NPAR   = 12        (Max is no. nodes)
+
+!Decomposed Charge Density:}
+ !!LPARD   = .TRUE. (Generate PARCHG)
+ !!LSEPB   = .TRUE. (Separate Bands into PARCHG.band)
+ !!IBAND   =  936    (Average over bands)
+ !!EINT    = -10 0  (Energy range)
+ !!NBMOD   =  -3    (With reference to E_F)
+ !!KPUSE   =  1     (Average over k-points)
+
+!Electronic Relaxation
+ PREC     = Accurate    (Precision level for FFT grid)
+ LREAL    = Auto        (Projection operators: automatic)
+ ALGO     = Fast      (Electronic minimisation algorithm: 38/48)
+ ENMAX    = 500.00 eV   (Plane-wave cutoff)
+ NELM     = 300         (Max number of SCF steps)
+ NELMAX   = 5           (Min number of SCF steps)
+ EDIFF    = 1E-06       (SCF convergence criteria)
+ GGA      =  PS         (PBEsol exchange-correlation)
+
+!Ionic Relaxation
+ EDIFFG   =      -0.005 (Ionic convergence criteria, eV/AA)
+ NSW      =      0      (Max ionic steps)
+ IBRION   =      1      (Ions: 0-MD, 1-Quasi-New, 2-CG)
+ ISIF     =      7      (Stress/Relaxation: 2-Ions, 3-Shape/Ions/Vol, 7-Vol)
+ ISYM     =      2      (Symmetry: Use all, 0: none)
+ ISMEAR   =      0      (Gaussian smearing, Metals:1, MP)
+ SIGMA    =      0.05   (Smearing value in eV, Metals:0.2)
+
+!Hybrid-DFT Calculations
+ !!LHFCALC     = .TRUE.   (Activate Hartree Fock)
+ !!PRECFOCK    = FAST     (HF FFT grid)
+ !!ALGO        = DAMPED   (Dampen: IALGO=53)
+ !!TIME        = 0.30     (Timestep for IALGO5X)
+ !!HFSCREEN    = 0.207    (Switch to screened exchange:HSE06)
+ !!AEXX        = 0.25     (25% HF exchange - PBE0)
+ !!LDIAG       = .True.   (Diagnolise Eigenvalues)
+ !!NKRED     = 2        (Reduce k-grid: even only)
+ !!LMAXFOCK  = 6        (Maximum quantum number: 4d,6f) 
+ !!HFLMAX    = 4        (Max quantum number: 4d,6f)
+
+!Miscellaneous
+ LORBIT      =   10     (PAW radii for projected DOS)\\
+ NEDOS       =  1000    (Increase DOSCAR points)
+ !!LVHAR       = .TRUE.   (Output electrostatic potential) 
+ !!LOPTICS   = .TRUE.   (Output OPTIC file)
+ !!LELF      = .TRUE.   (Output electron localization function)
+ !!LVDW      = .TRUE.	(DFT-D van der Waals interactions)
+
+!Magnetic Calculations
+ ISPIN       =  1       (Closed shell: 1, Spin Polarised: 2)
+ !!MAGMOM    = 10*-1 2*0 16*0     (Initial magnetic mom each ion)
+ !!NUPDOWN   = -1       (Enforce spin multiplet)
+ LSORBIT   = .TRUE.   (Spin-orbit coupling)
+
+!DFT+U Calculations
+ !!LDAU      = .TRUE.   (Activate DFT+U)
+ !!LDATYPE   = 2        (Dudarev, only U-J matters)
+ !!LDAUL     = 2 -1     (Orbital for each species)
+ !!LDAUU     = 2  0     (U for each species)
+ !!LDAUJ     = 0  0     (J for each species)
+ !!LMAXMIX   =  4       (Mixing cutoff: 4-d,6-f)
+
+!Molecular Dynamics
+ !!POTIM     =  10      (Timestep fs)
+ !!TEBEG     =  100     (Start temperature K)
+ !!TEEND     =  100     (End temperature K)
+ !!SMASS     =  0       (Canonical ensemble)

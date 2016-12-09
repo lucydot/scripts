@@ -1,0 +1,3 @@
+Simple program for plotting VASP band structures from the EIGENVAL 
+file. Requires the EIGENVAL file as input, also requests the range
+of bands over which to plot. Produces Bands.dat an NXY format file.
