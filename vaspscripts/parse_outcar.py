@@ -58,7 +58,7 @@ def ave_SCF_time(filein, skipSCF=0):
         ave_SCF_time = round(sum(scf_times) / len(scf_times))
     
     else:
-        ave_SCF_time = 'Error'
+        ave_SCF_time = None
     return (ave_SCF_time)
 
 def SCF_steps(filein):
@@ -75,7 +75,7 @@ def SCF_steps(filein):
 def kpar(filein):
     # reads from OUTCAR
     read_in = open(filein,'r').read()
-    match = re.search("distrk:\s*each\sk-point\son\s*.\d\scores,\s*([\d]*)",read_in)
+    match = re.search("distrk:\s*each\sk-point\son\s*\d*\scores,\s*([\d]*)",read_in)
     if match:
         kpar = int(match.groups()[0])
     else:
