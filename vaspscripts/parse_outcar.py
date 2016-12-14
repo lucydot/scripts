@@ -10,7 +10,7 @@ def total_energy(filein):
     if match:
         energy = float(match.groups()[0])
     else:
-        energy = 'NaN'
+        energy = None
     return energy
 
 def pressure(filein):
@@ -20,7 +20,7 @@ def pressure(filein):
     if match:
         pressure = float(match.groups()[0])
     else:
-        pressure = 'NaN'
+        pressure = None
     return pressure
 
 def total_time(filein):
@@ -30,7 +30,7 @@ def total_time(filein):
     if match:
         time = float(match.groups()[0])
     else:
-        time = 'NaN'
+        time = None
     return time
 
 def ave_SCF_time(filein, skipSCF=0):
@@ -74,37 +74,110 @@ def SCF_steps(filein):
 
 def kpar(filein):
     # reads from OUTCAR
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("distrk:\s*each\sk-point\son\s*.\d\scores,\s*([\d]*)",read_in)
+    if match:
+        kpar = int(match.groups()[0])
+    else:
+        kpar = None
+    return kpar
 
 def ncore(filein):
-    # reads from OUTCAR
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("distr:\s*one\sband\s*on\sNCORES_PER_BAND=\s*([\d]*)", read_in)
+    if match:
+        ncore = int(match.groups()[0])
+    else:
+        ncore = None
+    return ncore
+
+def npar(filein):
+    read_in = open(filein,'r').read()
+    match = re.search("distr:\s*one\sband\s*on\sNCORES_PER_BAND=\s*\d*\scores,\s*([\d]*)", read_in)
+    if match:
+        npar = int(match.groups()[0])
+
+    return npar
 
 def cores(filein):
     # reads from OUTCAR
-    return 0
+    kpa = kpar(filein)
+    read_in = open(filein,'r').read()
+    match = re.search("distrk:\s*each\sk-point\son\s*([-.\d]+)",read_in)
+    if match:
+        kcores = int(match.groups()[0])
+    else:
+        kcores = None
+    if kpa and kcores:
+        cores = kpa*kcores
+    else:
+        cores= None
+    return cores
 
 def nbands(filein):
     # reads from OUTCAR
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("NBANDS=\s*([\d]*)",read_in)
+    if match:
+        nbands = int(match.groups()[0])
+    else:
+        nbands = None
+    return nbands
 
 def nkpts(filein):
     # reads from OUTCAR
     # KPOINTS calculated after symmetry considerations. May not be product
     # of kmesh dimensions
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("NKPTS\s=\s*([\d]*)",read_in)
+    if match:
+        nkpts = int(match.groups()[0])
+    else:
+        nktps = None
+    return nkpts
 
-def nion(filein, atoms_in_unit_cell = None):
+def nion(filein):
     # reads from OUTCAR
-    if atoms_in_unit_cell:
-        # calculate how many unit cells there are
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("NIONS\s=\s*([\d]*)" ,read_in)
+    if match:
+        nions = int(match.groups()[0])
+    else:
+        nions = None
+    return nions
+
+def ncells(filein, atoms_in_unit_cell):
+    # reads from OUTCAR
+    read_in = open(filein,'r').read()
+    match = re.search("NIONS\s=\s*([\d]*)" ,read_in)
+    if match:
+        nions = int(match.groups()[0])
+    else:
+        nions = None
+    if nions:
+        unit_cells = float(nions / atoms_in_unit_cell)
+    else:
+        unit_cells = None
+    return unit_cells
 
 def nelect(filein):
     # reads from OUTCAR
-    return 0
+    read_in = open(filein,'r').read()
+    match = re.search("NELECT\s=\s*([.\d]*)", read_in)
+    if match:
+        nelect = float(match.groups()[0])
+    else:
+        nelect = None
+    return nelect
 
 def kmesh(filein):
     # reads from ....... KPOINTS!
-
+    read_in = open(filein,'r').read()
+    match = re.search("centered\sgrid\s*([.\d\s]*)" ,read_in)
+    if match:
+        kmesh = [int(i) for i in match.groups()[0].split()]
+    else:
+        kmesh = None
+    
+    return kmesh
 
