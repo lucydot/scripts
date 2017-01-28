@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for file in POSCAR-*
+do
+mkdir disp-${file:7:70}
+mv $file ./disp-${file:7:10}/${file:0:6}
+#cp {POTCAR,INCAR} ./disp-${file:7:10}/ 
+done
