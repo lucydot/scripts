@@ -8,4 +8,4 @@ pdflatex $FILE.tex -interaction=nonstopmode
 pdflatex $FILE.tex -interaction=nonstopmode
 
 rm {*.log,*.aux,*.out,*.bbl,*.blg,*Notes.bib}
-open $FILE.tex
+open $FILE.pdf
