@@ -22,10 +22,9 @@ def main(begin=1, save=False, kind='electronic',file='OUTCAR'):
 
     plt.scatter(x_coords[begin-1:],free_energies[begin-1:])
     
-    if kind == True:
-        plt.savefig('convergence.png') 
+    plt.savefig('convergence.png') 
     
-    return plt, free_energies
+    return free_energies
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plot energy convergence')
@@ -33,8 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--begin', default=1, help='step to start plot at (default:1)', type=int)
     parser.add_argument('-s', '--save', default=False, help='save plot (default:False)', type=bool)
     args = vars(parser.parse_args())
-    plt, free_energies = main(begin=args["begin"],save=args["save"],kind=args["type"], file="OUTCAR")
+    free_energies = main(begin=args["begin"],save=args["save"],kind=args["type"], file="OUTCAR")
     print (free_energies)
-    plt.show()
    
 
