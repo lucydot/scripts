@@ -4,17 +4,19 @@
 Carbon and kWh calculator. Searches folder for slurm job output files. 
 Calculates the total core hours used.
 Uses simple model (http://www.archer.ac.uk/about-archer/hardware/, 
-www.carbon-calculator.org.uk) to convert this to kWh and kg of carbon.
+carbon trust) to convert this to kWh and kg of carbon.
 """
 
 import glob
-import os
+import argparse
+from IPython import embed 
 
 def carbon_calculator(folder):
     TotalNodeHours = 0
-    for filename in glob.iglob(folder+"/**/*.o*",recursive=True):
-        os.system("cat filename >> FilesFound.txt")
-        for line in open("filename"):
+    for filename in glob.iglob(folder+"/**/*.o[!ut]*",recursive=True):
+        with open("FilesFound.txt","a") as textfile:
+            textfile.write(filename+'\n')
+        for line in open(filename):
             if "Resources allocated:" in line:
                 ncpus = line.split("ncpus=")[1].split(",vmem")[0]
                 walltime = line.split("walltime=")[1]
@@ -25,12 +27,8 @@ def carbon_calculator(folder):
         TotalNodeHours += nodeHours
 
     kWh = TotalNodeHours * (1200/4920)
-    kgCo2 = kWh*494
-    
-    text = """Total kWh for this folder: {0}
-              Total kg of CO2 for this folder: {1}
-           """.format(kWh, kgCo2)
-    os.system("cat text >> FilesFound.txt")
+    kgCo2 = kWh*0.5246
+    text = """Total kWh for this folder: {0} \nTotal kg of CO2 for this folder: {1}""".format(kWh, kgCo2)
     print (text)
     
 
