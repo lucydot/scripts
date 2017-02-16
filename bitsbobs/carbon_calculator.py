@@ -14,20 +14,20 @@ from IPython import embed
 def carbon_calculator(folder):
     TotalNodeHours = 0
     for filename in glob.iglob(folder+"/**/*.o[!ut]*",recursive=True):
-        with open("FilesFound.txt","a") as textfile:
-            textfile.write(filename+'\n')
         for line in open(filename):
             if "Resources allocated:" in line:
                 ncpus = line.split("ncpus=")[1].split(",vmem")[0]
                 walltime = line.split("walltime=")[1]
-        
-        nodes = int(ncpus) / 24
-        hours = int(walltime[:2])+int(walltime[3:5])/60
-        nodeHours = nodes*hours
-        TotalNodeHours += nodeHours
-    
-    if not glob.glob(folder+"/**/*.o[!ut]*",recursive=True):
-        print ("no slurm output files found")
+                with open(folder+"/FilesFound.txt","a") as textfile:
+                    textfile.write(filename+'\n')
+
+                nodes = int(ncpus) / 24
+                hours = int(walltime[:2])+int(walltime[3:5])/60+int(walltime[6:8])/3600
+                nodeHours = nodes*hours
+                TotalNodeHours += nodeHours
+       
+    if TotalNodeHours==0:
+        print ("zero node hours found....aborting...")
         return
 
     kWh = TotalNodeHours * (1200/4920)
