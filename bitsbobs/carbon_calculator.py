@@ -35,7 +35,7 @@ def carbon_calculator(folder):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""A script for calculating the
     kWh spent running job(s) in a given folder (to all depths).""")
-    parser.add_argument( '--folder', type=str, default=".", help="""The 
+    parser.add_argument( '-f','--folder', type=str, default=".", help="""The 
     search folder (default: current folder).""")
 
     args = parser.parse_args()
