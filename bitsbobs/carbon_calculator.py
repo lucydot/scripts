@@ -25,6 +25,10 @@ def carbon_calculator(folder):
         hours = int(walltime[:2])+int(walltime[3:5])/60
         nodeHours = nodes*hours
         TotalNodeHours += nodeHours
+    
+    if not glob.glob(folder+"/**/*.o[!ut]*",recursive=True):
+        print ("no slurm output files found")
+        return
 
     kWh = TotalNodeHours * (1200/4920)
     kgCo2 = kWh*0.5246
