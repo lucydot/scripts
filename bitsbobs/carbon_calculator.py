@@ -1,4 +1,4 @@
-#!/bin/usr/env python3
+#!/usr/bin/env python3
 
 """
 Carbon and kWh calculator. Searches folder for slurm job output files. 
