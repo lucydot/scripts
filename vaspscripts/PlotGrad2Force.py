@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 Takes output from grad2 and plots forces.
 """
 
-os.system("grad2 OUTCAR >> grad2_data")
+os.system("grad2 OUTCAR >> grad2_data.tmp")
 forces = []
 with open ("grad2_data", "r") as myfile:
     for line in myfile:
@@ -19,5 +19,6 @@ with open ("grad2_data", "r") as myfile:
 x_coords = range(1, len(forces)+1)
 plt.scatter(x_coords[:],forces[:])
 plt.savefig('force_convergence.png')
-
+os.system("rm grad2_data.tmp")
 print (forces)
+
