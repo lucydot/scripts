@@ -5,27 +5,38 @@ Carbon and kWh calculator. Searches folder for slurm job output files.
 Calculates the total core hours used.
 Uses simple model (http://www.archer.ac.uk/about-archer/hardware/, 
 carbon trust) to convert this to kWh and kg of carbon.
+Requires Python 3.5.
 """
 
+import datetime
+import os
 import glob
 import argparse
 from IPython import embed 
 
-def carbon_calculator(folder):
+def carbon_calculator(folder, startdate):
     TotalNodeHours = 0
     for filename in glob.iglob(folder+"/**/*.o[!ut]*",recursive=True):
-        for line in open(filename):
-            if "Resources allocated:" in line:
-                ncpus = line.split("ncpus=")[1].split(",vmem")[0]
-                walltime = line.split("walltime=")[1]
-                with open(folder+"/FilesFound.txt","a") as textfile:
-                    textfile.write(filename+'\n')
+        if startdate:
+            stat = os.stat(filename)
+            try:
+                creationDate = stat.st_birthtime
+                break
+            except AttributeError:
+                print("Ah, sorry setting the start date only works for Mac os")
+            if creationDate > startdate:
+                for line in open(filename):
+                    if "Resources allocated:" in line:
+                        ncpus = line.split("ncpus=")[1].split(",vmem")[0]
+                        walltime = line.split("walltime=")[1]
+                        with open(folder+"/FilesFound.txt","a") as textfile:
+                            textfile.write(filename+'\n')
 
-                nodes = int(ncpus) / 24
-                hours = int(walltime[:2])+int(walltime[3:5])/60+int(walltime[6:8])/3600
-                nodeHours = nodes*hours
-                TotalNodeHours += nodeHours
-       
+                        nodes = int(ncpus) / 24
+                        hours = int(walltime[:2])+int(walltime[3:5])/60+int(walltime[6:8])/3600
+                        nodeHours = nodes*hours
+                        TotalNodeHours += nodeHours
+	       
     if TotalNodeHours==0:
         print ("zero node hours found....aborting...")
         return
@@ -41,9 +52,10 @@ if __name__ == "__main__":
     kWh spent running job(s) in a given folder (to all depths).""")
     parser.add_argument( '-f','--folder', type=str, default=".", help="""The 
     search folder (default: current folder).""")
-
+    parser.add_argument( '-s', '--startdate', type=lambda d: time.mktime(datetime.strptime(d, '%d/%m/%Y').timetuple()),
+		    default = None, help="The date you would like to search from")
     args = parser.parse_args()
     
-    carbon_calculator(args.folder)    
+    carbon_calculator(args.folder, args.startdate)    
 
 
