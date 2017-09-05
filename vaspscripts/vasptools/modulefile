@@ -1,0 +1,18 @@
+#%Module -*- tcl -*-
+##
+## modulefile
+##
+proc ModulesHelp { } {
+  puts stderr "Adds vasptools to your environment variables."
+  puts stderr "vasptools is a python package for post treatments of VASP output (DOS, bands ...)"
+  puts stderr "please contact germain.vallverdu@univ-pau.fr for comments, bog or suggestions"
+}
+
+module-whatis "vasptools is a package for post treatments of VASP output (DOS, bands ...)"
+
+module load python/2.7.3
+
+set              root                 /opt/cluster/contrib/apps/vasptools/
+append-path      PYTHONPATH           $root
+append-path      PATH                 $root/scripts/
+

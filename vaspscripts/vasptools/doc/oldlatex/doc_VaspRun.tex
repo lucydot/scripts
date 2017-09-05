@@ -1,0 +1,576 @@
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+% *
+% * Documentation classe VaspRun
+% *
+% * Germain Vallverdu
+% * Mer 6 Oct 2010
+% * germain.vallverdu@univ-pau.fr
+% *
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+\documentclass[10pt,a4paper,fleqn]{article}
+
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+% *
+% * preambule
+% *
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+\input{preambule}
+\usetikzlibrary{shapes}
+
+\graphicspath{{./images/}}
+
+\title{Classe python VaspRun pour le post-traitement de calculs VASP}
+\author{Germain Vallverdu}
+\date{\today}
+
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+% *
+% * debut document
+% *
+% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+\begin{document}
+\renewcommand{\labelitemi}{\hspace{3ex} $\bullet$} 
+
+\maketitle
+
+La classe \verb!VaspRun! est une classe python permettant de faire du post traitement de calculs
+VASP . Elle extrait les informations du fichier \verb!vasprun.xml! créé par VASP à la fin du calcul.
+La raison du choix de lire les données sur le fichier \verb!vasprun.xml! plutôt que sur les différents
+fichiers de sortie de VASP est que le fichier xml est un ensemble cohérent. Il contient à la fois
+les paramètres du calculs et les résultats. En utilisant ce fichier on est donc certain de la
+correspondance entre les résultats et les paramètres du calcul.
+
+Il est inutile de connaître le langage python pour l'utiliser. La classe \verb!VaspRun! peut être vue
+comme une simple boite à outils. Ce document décrit les possibilités offertes par cet outil.
+
+\tableofcontents
+
+\newpage
+
+\section{Utilisation}
+
+\subsection{Généralités :}
+
+Pour l'utiliser on procède en quatre étapes dans un terminal :
+
+\begin{enumerate}
+	\item On lance python
+	\item On charge le fichier VASP.py qui contient les outils de post-traitement.
+	\item On crée un nouveau calcul VASP (pour parler technique : on crée une
+		instance de la classe \verb!VaspRun!).
+	\item On utilise un des outils (on appelle une méthode de la classe \verb!VaspRun!).
+\end{enumerate}
+
+\subsection{Un exemple détaillé :}
+
+Un petit exemple, pour extraire les bandes d'énergie :
+
+\begin{enumerate}
+	\item On lance python
+
+\begin{console}
+[gvallver@kiwi] > python3
+\end{console}
+
+	\item On charge le fichier VASP.py
+
+\begin{console}
+>>> import VASP
+\end{console}
+
+	\item On crée un calcul que l'on appelle \verb!calcul!, le nom est sans importance. C'est
+		ici que l'on appelle la classe \verb!VaspRun!, comme elle est contenu dans le
+		fichier VASP.py on l'appelle en indiquant : \verb!VASP.VaspRun()!
+
+\begin{console}
+>>> calcul = VASP.VaspRun()
+\end{console}
+
+	\item on demande d'extraire les bandes d'énergie :
+
+\begin{console}
+>>> calcul.extraireBandes()
+\end{console} 
+
+\end{enumerate}
+
+Les étapes de 1 à 3 ne sont réalisées qu'une seule fois au départ. On va ensuite utiliser les outils
+que l'on souhaite de la même manière qu'à l'étape 4. On utilise la syntaxe :
+
+\begin{console}
+	mon_calcul . un_outil( options )
+\end{console}
+
+\subsection{L'exemple complet, une vrai exécution :}
+
+Voilà ce qui se passe lorsqu'on entre la série de commande précédente. On peut voir que lors de la
+création du calcul (lorsqu'on instancie la classe \verb!VaspRun!) des informations concernant le
+calcul s'affichent. On a entre autre le contenu du fichier \verb!INCAR! puis le nombre et le type
+d'atome.
+
+\begin{console}
+[gvallver@kiwi]> python3
+Python 3.1.2 (r312:79147, Apr 15 2010, 12:35:07) 
+[GCC 4.4.3] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import VASP
+>>> calcul = VASP.VaspRun()
+
+# Fichier xml du calcul : vasprun.xml
+        * lecture du fichier xml
+        * Lecture des mots clefs du calcul
+        * Lecture des points K du calcul
+        * Lecture des donnees sur les atomes du calcul
+
+# fichier INCAR du calcul
+     ENCUT = 400.0         ISTART = 0               NELM = 200       
+      PREC = normal          ISIF = 3             IBRION = 2         
+    EDIFFG = -0.01         ISMEAR = 0              LREAL =  auto     
+     EDIFF = 1e-06            NSW = 100            SIGMA = 0.05      
+
+# caracteristiques du systeme :
+        * nombre d'atomes  : 8
+        * nombre de types  : 1
+        * liste des atomes : Si, Si, Si, Si, Si, Si, Si, Si
+
+# Liste des types d'atomes du calcul et de leur caracteristiques :
+Atome Si : 
+        masse                    : 28.085
+        Nbre electron de valence : 4.0
+        type                     : 1
+        Pseudo potentiel         :  PAW_PBE Si 05Jan2001                   
+
+>>> run.extraireBandes()
+# Lecture des bandes d'energies
+        * ISPIN            = 1
+        * nombre de bandes = 8
+
+# extraction des bandes d'energie
+Fichier(s) cree(s) : 1
+        bandes.dat
+
+>>>
+\end{console}
+
+\subsection{Autres syntaxes :}
+
+Il existe une autre syntaxe possible pour créer un calcul qui peut sembler plus simple.
+L'utilisation de l'une ou l'autre n'a pas d'importance.
+
+\begin{console}
+[gvallver@kiwi]> python3
+Python 3.1.2 (r312:79147, Apr 15 2010, 12:35:07) 
+[GCC 4.4.3] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from VASP import *
+>>> calcul = VaspRun()
+...
+\end{console}
+
+Il est possible que le fichier xml du calcul ne s'appelle pas \verb!vasprun.xml!, par exemple
+parce qu'il a été renommé. Dans ce cas, lors de la création du calcul, il suffit de préciser le nom
+(ou le chemin) du fichier xml entre guillemets dans les parenthèse. Voici un exemple où le fichier
+s'appelle \verb!bandes.xml!.
+
+\begin{console}
+[gvallver@kiwi]> python3
+Python 3.1.2 (r312:79147, Apr 15 2010, 12:35:07) 
+[GCC 4.4.3] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from VASP import *
+>>> calcul = VaspRun(''bandes.xml'')
+
+# Fichier xml du calcul : bandes.xml
+        * lecture du fichier xml
+        * Lecture des mots clefs du calcul
+        * Lecture des points K du calcul
+        * Lecture des donnees sur les atomes du calcu
+...
+\end{console}
+
+\subsection{Scripts :}
+
+Si on doit faire un traitement répétitif il est possible de placer l'ensemble des commandes dans un
+fichier à exécuter avec python. Reprenons l'exemple de l'affichage du fichier \verb!INCAR! du
+calcul. On place dans un fichier \verb!script.py! les lignes suivantes (les lignes commençant par \#
+sont des commentaires) :
+
+\begin{lstlisting}[language=python,
+	keywordstyle=\bfseries\color{FireBrick},
+	basicstyle=\ttfamily,commentstyle=\color{Navy!60}]
+# on charge VASP
+from VASP import *
+
+# on cree le calcul
+calcul = VaspRun(``bandes.xml'')
+
+# on appelle la methode pour afficher le fichier INCAR
+calcul.extraireBandes()
+\end{lstlisting}
+
+On exécute ensuite le script avec python dans un terminal :
+
+\begin{console}
+[gvallver@kiwi]> python3 script.py
+
+# Fichier xml du calcul : bandes.xml
+        * lecture du fichier xml
+        * Lecture des mots clefs du calcul
+        * Lecture des points K du calcul
+        * Lecture des donnees sur les atomes du calcul
+
+# fichier INCAR du calcul
+     ENCUT = 450.0         ISTART = 1             SYSTEM =  "Si bulk"
+      PREC = medium        ICHARG = 11              ALGO =  FAST     
+    ISMEAR = 0              EDIFF = 1e-06          SIGMA = 0.05      
+
+# caracteristiques du systeme :
+        * nombre d'atomes  : 2
+        * nombre de types  : 1
+        * liste des atomes : Si, Si
+
+# Liste des types d'atomes du calcul et de leur caracteristiques :
+Atome Si : 
+        masse                    : 28.085
+        Nbre electron de valence : 4.0
+        type                     : 1
+        Pseudo potentiel         :  PAW_PBE Si 05Jan2001                   
+
+
+# Lecture des bandes d'energies
+        * ISPIN            = 1
+        * nombre de bandes = 8
+
+# extraction des bandes d'energie
+Fichier(s) cree(s) : 1
+        bandes.dat
+
+[gvallver@kiwi]> 	   
+\end{console}
+
+\section{Liste des outils}
+
+En python les ``outils'' disponnibles dans une classe sont appelé des méthodes. Voici donc la liste
+des méthodes, ou outils, disponibles dans la classe \verb!VaspRun! et leur utilisation. Les noms des
+méthodes sont assez explicites. On donne d'abord la liste des méthodes, leur utilisation est
+décrites plus loin.
+
+On rappelle que pour utiliser un outil quel qu'il soit, on utilise la syntaxe :
+
+\begin{console}
+	mon_calcul . un_outil( options )
+\end{console}
+
+\subsection{Liste des méthodes :}
+
+\begin{itemize}
+	\item Obtenir des informations sur les paramètres du calculs :
+		\begin{itemize}
+			\item getINCAR()
+			\item getKPOINTS()
+			\item listerMotsClefs()
+			\item valeurMotClef( ``Mot Clef'' )
+			\item listerGroupesMotsClefs()
+			\item groupeMotsClefs( ``titre du groupe'')
+			\item getInfoAtomes() \\
+		\end{itemize}
+
+	\item Obtenir les bandes d’énergies :
+		\begin{itemize}
+			\item extraireBandes( parDirection= True/False )
+			\item lectureBandes() \\
+		\end{itemize}
+
+	\item Obtenir les densités d’états totale et projetées :
+\end{itemize}
+
+\subsection{Obtenir de l'aide :}
+
+Pour obtenir de l'aide directement dans la consôle python (après avoir lancé python) on a deux
+possibilités :
+
+\begin{itemize}
+	\item On utilise la fonction \verb!help()! de python
+	\item On appelle la méthode \verb!help()! de la classe \verb!VaspRun!.
+\end{itemize}
+
+Les deux possibilités rapporte les mêmes informations. La fonction \verb!help()! de python contient
+cependant plus d'informations techniques alors que celle de la classe \verb!VaspRun! contient
+uniquement le nom des méthodes, leurs but et leur syntaxe.
+
+Voici les syntaxes possibles :
+
+\begin{console}
+[gvallver@kiwi]> python3
+Python 3.1.2 (r312:79147, Apr 15 2010, 12:35:07) 
+[GCC 4.4.3] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from VASP import *
+>>> VaspRun.help()
+. . . affiche l'aide interne de VaspRun
+>>>
+>>> help(VaspRun)
+. . . affiche l'aide python sur VaspRun
+>>>
+>>> import VASP
+>>> VASP.VaspRun.help()
+. . . affiche l'aide interne de VaspRun
+>>>
+>>> help(VASP.VaspRun)
+. . . affiche l'aide python sur VaspRun
+>>>
+>>> calcul = VASP.VaspRun()
+>>> help(calcul)
+. . . affiche l'aide python sur VaspRun
+>>>
+\end{console}
+
+\subsection{Obtenir des informations sur les paramètres du calculs :}
+
+Ces méthodes permettent d'obtenir des informations sur les paramètres du calcul et le système
+étudié.
+
+\begin{itemize}
+	\item getINCAR() \\
+
+		Cette méthode affiche l'ensemble des mots clefs présents dans le fichier INCAR
+		du calcul. \\
+
+	\item getKPOINTS() \\
+
+		Affiche les informations du fichiers KPOINTS \\
+
+	\item listerMotsClefs() \\
+
+		Cette méthode interroge la base de données contenant l'ensemble des valeurs des
+		mots clefs de VASP utilisés dans le calcul et affiche la liste des mots clefs.
+		(voir\par \verb!valeurMotClef( "Mot Clef" )! ). \\
+
+	\item valeurMotClef( "Mot Clef" ) \\
+
+		Cette méthode interroge la base de données contenant l'ensemble des valeurs des
+		mots clefs de VASP utilisés dans le calcul et affiche la valeur du mot clef
+		demandé (voir\par \verb!listerMotsClefs()! ). \\
+
+	\item groupeMotsClefs("titre du groupe") \\
+
+		Cette méthode interroge la base de données contenant les mots clefs du calcul
+		et affiche la liste des mots clefs contenu dans le groupe dont le titre est donné en
+		argument (voir \verb!listerGroupesMotsClefs()! ). \\
+
+	\item listerGroupesMotsClefs() \\
+
+		Cette méthode interroge la base de données contenant les mots clefs du calcul
+		et affiche la liste des titres des groupes de mots clefs (voir \par
+		\verb!groupeMotsClefs( "titre" )! ) \\
+
+	\item getInfoAtomes() \\
+
+		Affiche des informations sur le système : nombre d'atomes, types, pseudo \ldots \\
+
+\end{itemize}
+
+\subsection{Obtenir les bandes d'énergies :}
+
+Ces méthodes permettent d'extraire les bandes d'énergie. Il n'est pas nécessaire d'appeler la
+méthode de lecture des bandes d'énergie avant celle pour extraire les bandes d'énergie.
+
+\begin{itemize}
+	\item extraireBandes( parDirection= True/False ) \\
+		
+		Méthode permettant d'extraire les bandes d'énergie du fichier xml et de les
+		écrire dans un format pratique pour le tracer. \\
+
+		\begin{itemize}
+			\item \verb!calcul.extraireBandes()! ou 
+				\verb!calcul.extraireBandes(parDirection=False )!
+				\\
+
+				extrait toutes les bandes dans le fichier "bandes.dat". Sur le
+				fichier "bandes.dat", la colonne 1 donne l'indice du point k entre 0
+				et 1 (indice du points k / nbre de points k). Les colonnes de 2 à
+				NBANDS (nombre de bandes) contiennent les valeurs des bandes
+				d'énergie pour ce point k en eV.
+
+				Si ISPIN = 2, un fichier est créé pour chaque spin. \\
+
+			\item \verb!calcul.extraireBandes( parDirection=True )!  \\
+
+				extrait toutes les bandes par direction dans l'espace réciproque et
+				crée un fichier par direction. Dans chaque fichier les 3 premières
+				colonnes donnent les coordonnées du points k. Les colonnes de 4 à
+				NBANDS (nombre de bandes) contiennent les valeurs des bandes
+				d'énergie pour ce point k en eV. \\
+		\end{itemize}
+
+	\item lectureBandes() \\
+
+		Méthode permettant de lire les bandes d'énergie sur le fichier xml du calcul.
+		Après exécution de cette méthode, on dispose des bandes d'énergie dans la liste
+		Bandes sous la forme :
+    
+\begin{console}
+from VASP import *
+calcul = VaspRun()
+calcul.bandes[ spin ][ point k ][ bandes ][ i ]
+\end{console}
+
+\begin{tabularx}{0.95\textwidth}{lcX}
+    
+                    spin  &  : & 0 ou 1, seule la valeur 0 est disponnible pour les calculs
+                            avec spin non polarisé (ISPIN = 1). Pour les calculs spin
+                            polarisé (ISPIN = 2), spin = 0 donne les bandes pour les
+                            spin alpha et spin = 1 pour les spin beta. \\
+    
+                    point k & : & 0 -> nombre de point K\par
+                            le nombre de point k est calcul.nbrePointsK
+                            calcul.nbreDirectionsPointsK : nombre de directions de points k
+                            calcul.Ndivision             : nombre de points k par direction
+                            Les points k sont listés direction après direction en
+                            donnant l'ensemble des points k sur chaque direction. \\
+    
+                    bandes & : & 0 -> NBANDS-1 \\
+    
+                    i   &    : & 0 ou 1 \par
+                            i = 0 -> valeurs de l'énergie
+                            i = 1 -> occupation de la bande \\
+\end{tabularx}
+
+\end{itemize}
+
+\subsection{Obtenir les densités d'états totale et partielles :}
+
+\begin{itemize}
+	\item extraireDOS( partielles = True/False ) \\
+
+		Méthode permettant d'extraire la densité d'états totale et les densités d'états
+		partielles projetées sur les atomes et de les écrire dans un format pratique pour
+		les tracer.  \\
+
+		\begin{itemize}
+			\item \verb!calcul.extraireDOS()! ou 
+				\verb!calcul.extraireDOS( partielles=False )! \\
+				
+				extrait la DOS totale dans le fichier "dosTotale.dat". Sur le
+				fichier "dosTotale.dat", la colonne 1 donne l'énergie, la colonne 2
+				donne la densité d'états et la colonne 3 donne l'intégrale de la
+				densité d'états. \par
+				Si ISPIN = 2, un fichier est créé pour chaque spin. \\
+
+			\item \verb!calcul.extraireDOS( partielles = True ) ! \\
+
+				extrait la DOS totale dans le fichier "dosTotale.dat" et les DOS
+				partielles sur des fichiers séparés. Pour les DOS partielles, un
+				fichier par atome est créé portant le nom de l'atome et son numéro
+				correspondant à l'ordre dans lequel ils sont donnés dans le POSCAR.
+				Les fichiers contenant les DOS partielles ont en colonne 1 l'énergie
+				et en colonne 2 -> 9 les DOS partielles projetées sur les OA dans
+				l'ordre : s py pz px dxy dyz dz2 dxz dx2. \par
+				Si ISPIN = 2, un fichier est créé pour chaque spin. \\
+		\end{itemize}
+
+
+
+	\item lectureDOS() \\
+
+		Lecture de la densité d'états totale et des densités d'états partielles sur le
+		fichier xml du calcul. Après exécution de cette méthode, on dispose de la densité
+		d'états totale dans la liste dosTotale et des densités d'états partielles dans la
+		liste dosPartielles. Elles sont de la forme :
+
+
+\begin{console}
+from VASP import VaspRun
+calcul = VaspRun()
+calcul.dosTotale[ spin ][ E ][ i ]
+\end{console}
+    
+\begin{tabularx}{0.95\textwidth}{lcX}
+                    spin   & : & 0 ou 1, seule la valeur 0 est disponnible pour les calculs
+                            avec spin non polarisé (ISPIN = 1). Pour les calculs spin
+                            polarisé (ISPIN = 2), spin = 0 donne les bandes pour les
+                            spin alpha et spin = 1 pour les spin beta. \\
+    
+                    E      & : & indice de parcours de la DOS pour un spin (valeurs de l'énergie) \\
+    
+                    i      & : & 0 -> 2\par
+                            i = 0 -> valeurs de l'énergie\par
+                            i = 1 -> densité d'état\par
+                            i = 2 -> intégrale de la DOS \\
+\end{tabularx}
+
+\vspace{5mm}
+
+\begin{console}
+calcul.dosPartielles[iat][ spin ][ E ][ i ]
+\end{console}
+    
+\begin{tabularx}{0.95\textwidth}{lcX}
+		    iat    & : & numéro de l'atome \\
+                    spin   & : & 0 ou 1, seule la valeur 0 est disponnible pour les calculs
+                            avec spin non polarisé (ISPIN = 1). Pour les calculs spin
+                            polarisé (ISPIN = 2), spin = 0 donne les bandes pour les
+                            spin alpha et spin = 1 pour les spin beta. \\
+    
+                    e      & : & indice de parcours de la DOS pour un spin (valeurs de l'énergie) \\
+    
+                    i      & : & 0 -> 8 valeurs de la DOS sur chaque OA \par
+		    0 = $s$, 1 = $p_y$, 2 = $p_z$, 3 = $p_x$, 4 = $d_{xy}$, 5 = $d_{yz}$, 6 = $d_{z^2}$,
+		    7 = $d_{xz}$, 8 = $d_{x^2-y^2}$ \\
+\end{tabularx}
+
+\end{itemize}
+
+\newpage
+\section{Liste des attributs}
+
+Cette section liste les attributs des objets de type \verb!VaspRun!.
+
+\begin{tabularx}{\textwidth}{|l|>{\itshape}c|X|}
+	\hline
+	\textbf{Attribut} & \textbf{type} & \centering \textbf{Définition} \tabularnewline
+	\hline
+	self.fichierXML & string & nom du fichier xml \\
+	self.xml & dom & objet xml créé à partir du fichier xml \\
+	\hline
+	self.erreur & bool & vrai si le fichier xml est introuvable \\
+	self.DOSlue &bool &  contrôle si la DOS totale a été lue \\
+	self.DOSPartiellesLues & bool & contrôle si les DOS partielles ont été lues \\
+	self.BandesLues & bool & contrôle si les bandes d'énergie ont été lues \\
+	\hline
+	self.allMotsClefs & dic & dictionnaire des mots clefs du calcul \\
+	self.INCAR & dic & dictionnaire des mots clefs du fichier INCAR \\
+	self.groupesMotsClefs & dic & dictionnaire des groupes de mots clefs, chaque groupe est repéré par
+	le titre du groupe.\\
+	\hline
+	self.Natomes & int & Nombre d'atomes dans le calcul \\
+	self.Ntypes & int & Nombre de type d'atomes dans le calcul \\
+	self.atomesDuCalcul & UnAtome & Liste des atomes du calcul. Chaque élément de la liste est de type
+	UnAtome et possède les attributs : nom, atomType, nElecValence, masse et pseudo. \\
+	\hline
+	self.eFermi & float & Energie en eV au niveau de Fermi \\
+	self.dosTotale & list & Tableau contenant la DOS totale : \par
+		\verb!dosTotale[spin][E][i]! \\
+	self.dosPartielles & list & Tableau contenant les DOS partielles :\par 
+	\verb!dosPartielles[iat][spin][E][i]! \\
+	\hline
+	self.bandes & list & Tableau contenant les bandes d'énergie :\par 
+	\verb!Bandes[spin][point k][bandes][i]! \\
+	\hline
+	self.typePointsK & string & type de points k : Gamma (grille régulière) ou listgenerated (selon des
+	lignes de symétrie). \\
+	self.Ndivision & int & Nombre de points k le long de chaque ligne (listgenerated) ou le long de
+	chaque direction (Gamma) \\
+	self.nbrePointsK & int & Nombre totale de points k \\
+	self.nbreDirectionsPointsK & int & Nombre de ligne de points k dans le cas listgenerated. \\
+	self.PointsK & list & Dans le cas où self.typePointsK = listgenerated, self.PointsK est la liste
+	des points k entre lesquels sont construites les lignes de points k. \\
+	self.listePointsK & list & Liste de longueur self.nbrePointsK contenant les coordonnées des points
+	k \\
+	\hline
+\end{tabularx}
+
+\end{document}

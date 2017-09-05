@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # original code written by Jonathan Skelton, github: JMSkelton
 
@@ -7,6 +7,7 @@
 import csv;
 import math;
 import os;
+from IPython import embed
 
 import numpy as np;
 import matplotlib as mpl;
@@ -29,17 +30,14 @@ OutputFileName = "bandstructure.png";
 BandPaths = [
             	[
                 ((0.0, 0.0, 0.0), r"$\Gamma$"),
-                ((0.5, 0.0, 0.5), "X"),
-                ((0.375, 0.375, 0.75), "K"),
-                ((0.0, 0.0, 0.0), r"$\Gamma$"),
-                ((0.5, 0.5, 0.5), "L")
+                ((0.5, 0.0, 0.0), "X")
 		        ],
 	        ];
 
 ReciprocalLatticeVectors = [
-                             (1.1569113, 1.1569113, 1.1569113),
-                             (1.1569113, -1.1569113, -1.1569113),
-                             (-1.1569113, 1.1569113, -1.1569113) 
+                             (0.4979701, -0.000003, -0.0035156),
+                             (3.1e-06, 0.5045429, 5.8e-06),
+                             (-0.0066013, -5.9e-06, 0.4914698),
                            ];
 
 UseInterpolation = False; #This uses a scipy routine to interpolate between k-points
@@ -164,16 +162,16 @@ mpl.rc('font', **{ 'family' : 'serif', 'size' : 14, 'serif' : 'Arial' });
 plt.figure(figsize =  (12/ 2.54, 12 / 2.54)); #2.54 cm in an inch - matplotlib uses inches
 
 for i in range(0, len(plotSets)):
-                print len(plotSets)
-		kPointDistances, bandEnergies, interpolatedKPointDistances, interpolatedBandEnergies = plotSets[i];
-		r, g, b = Colors[i];
-                if interpolatedKPointDistances != None:
-			for j in range(0, len(bandEnergies)):
+    print len(plotSets)
+    kPointDistances, bandEnergies, interpolatedKPointDistances, interpolatedBandEnergies = plotSets[i];
+    r, g, b = Colors[i];
+    if interpolatedKPointDistances != None:
+	    for j in range(0, len(bandEnergies)):
 		#		plt.scatter(kPointDistances, bandEnergies[j], 3, facecolor = 'none', edgecolor = (r / 255.0, g / 255.0, b / 255.0), linewidth = 0.5);
-				plt.plot(interpolatedKPointDistances, interpolatedBandEnergies[j], color = (r / 255.0, g / 255.0, b / 255.0), linewidth = 1.0);
-		else:
-			for band in bandEnergies:
-				plt.plot(kPointDistances, band, color = (r / 255.0, g / 255.0, b / 255.0), linewidth = 1.0); #matplotlib likes rgb colors as a decimal
+	        plt.plot(interpolatedKPointDistances, interpolatedBandEnergies[j], color = (r / 255.0, g / 255.0, b / 255.0), linewidth = 1.0);
+    else:
+		for band in bandEnergies:
+			plt.plot(kPointDistances, band, color = (r / 255.0, g / 255.0, b / 255.0), linewidth = 1.0); #matplotlib likes rgb colors as a decimal
 
 plt.xlim((specialPointDistances[0], specialPointDistances[-1]));
 plt.ylim((-5, 5)); # change to plot over larger energy interval

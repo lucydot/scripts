@@ -16,6 +16,9 @@ EOF
 echo "I am excluding from backup: "
 cat exclude.tmp
 
+#echo "Fetching work from TomTom"
+#rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" --exclude-from 'exclude.tmp' mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/jobs/ ~/data
+
 #echo "Fetching work from Balena"
 #rsync -avzu --exclude-from 'exclude.tmp' lw827@balena.bath.ac.uk:/home/o/lw827/jobs/ ~/data/all 
 
@@ -28,8 +31,14 @@ cat exclude.tmp
 echo "Fetching work from Archer"
 rsync -avzu --exclude-from 'exclude.tmp' lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data
 
+#echo "Fetching work from Archerdotty"
+#rsync -avzu --exclude-from 'exclude.tmp' dotty@login.archer.ac.uk:/work/e461/e461/dotty/jobs/ ~/data
+
 #echo "Fetching work from Frisc"
 #rsync -avzu --exclude-from 'exclude.tmp' pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs/ ~/data/all
 
 #echo "Fetching work from Sisu"
-#rsync -avzu --exclude-from 'exclude.tmp' pr1uycul@sisu.csc.fi:/homeappl/home/pr1uycul/jobs/ ~/data/all
+#rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" --exclude-from 'exclude.tmp' pr1uycul@sisu.csc.fi:/homeappl/home/pr1uycul/jobs/ ~/data
+
+echo "Fetching work from cx1"
+rsync -avzu --exclude-from 'exclude.tmp' lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data

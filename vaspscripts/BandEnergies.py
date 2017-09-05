@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #BandEnergies.py
 
@@ -26,7 +26,7 @@ import csv;
 import math;
 import os;
 import re;
-
+from IPython import embed
 #EndRegions
 
 
@@ -283,13 +283,13 @@ class BandAnalyser:
 				bandData = input[i];
 				
 				j = len(bandData) - 1;
-				
 				if onlyAnalyseZeroWeightKPoints or kPointWeights[i] == 0.0:
 					#COMMENT: For k-points with zero weight, VASP does not print out occupations, so assume occupancies based on the values of NELECT and ISPIN/LSORBIT read from the OUTCAR file.
 					
 					#TODO: This could be handled better - e.g. copying occupations from the nearest non-zero weighted k-point.
 					
-					cbIndex = int(math.ceil(self._numberOfElectrons / 2.0)) if not (self._isSpinPolarisedCalculation or self._isSpinOrbitCouplingCalculation) else self._numberOfElectrons;
+					cbIndex = int(math.ceil(self._numberOfElectrons / 2.0)) 
+                    #if not (self._isSpinPolarisedCalculation or self._isSpinOrbitCouplingCalculation) else self._numberOfElectrons;
 					
 					vbIndex, vbEnergy, vbOccupation = bandData[cbIndex - 1];
 					cbIndex, cbEnergy, cbOccupation = bandData[cbIndex];
