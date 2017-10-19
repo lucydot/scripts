@@ -26,7 +26,8 @@ def carbon_calculator(folder, startdate):
                nodeHours =  read_file(folder,filename)
         else:
             nodeHours = read_file(folder,filename)
-        TotalNodeHours += nodeHours
+        if nodeHours is not None:
+            TotalNodeHours += nodeHours
     
     if TotalNodeHours==0:
         print ("zero node hours found....aborting...")
