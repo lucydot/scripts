@@ -40,7 +40,14 @@ case $1 in
    
     tomtom) address="mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/jobs/" 
              identity=".ssh/curie_rsa"
+    ;;
+    daint) address="lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/"
+            identity=".ssh/curie_rsa"
+	    proxycommand="ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"
+    ;;
     esac  
 ########### Send files with rsync ##############
 echo "Sending $directory to $address "
-rsync -avzu -e "ssh -i \"$HOME/$identity\""  "$directory" "$address"
+rsync -avzu -e 'ssh -i "$HOME/$identity" -o "$proxycommand"'  "$directory" "$address"
+
+
