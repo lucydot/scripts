@@ -1,44 +1,72 @@
 #! /bin/bash
 ### Fetch research data from remote servers ###
-# Construct an exclude.tmp list for rsync
+### Then push all that data to the EPSRC secure data storage ###
+if [ "$2" == "small" ]; then
 cat > exclude.tmp <<EOF
-oq#cq <--- this is an Rsync comment (I know, crazy eh?)
-oq#cq Standard VASP big files
 *WAVECAR*
-*LOCPOT*
-*XDATCAR*
-oq#cq General unix core-dumps (crashed program memory contents)
-*tar*
-*tgz*
-*core*
+*CHGCAR*
+*CHG*
+*OSZICAR*
 EOF
-# Echo the contents to the user
-echo "I am excluding from backup: "
-cat exclude.tmp
+else 
+    cat > exclude.tmp <<EOF
+EOF
+fi
 
-#echo "Fetching work from TomTom"
-#rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" --exclude-from 'exclude.tmp' mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/jobs/ ~/data
-
-#echo "Fetching work from Balena"
-#rsync -avzu --exclude-from 'exclude.tmp' lw827@balena.bath.ac.uk:/home/o/lw827/jobs/ ~/data/all 
-
-#echo "Fetching work from Cobalt"
-#rsync -avzu --exclude-from 'exclude.tmp' lucy@chpc-cobalt.bath.ac.uk:/home/lucy/jobs/ ~/data/all
-
-#echo "Fetching work from Archerdot"
-#rsync -avzu --exclude-from 'exclude.tmp' lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/ ~/data/all
-
+case $1 in
+    tomtom)
+echo "Fetching work from TomTom"
+rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/Scratch/ ~/data/
+;;
+    archerdot)
+echo "Fetching work from Archerdot"
+rsync -avzu lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/ ~/data/
+;;
+    archer)
 echo "Fetching work from Archer"
-rsync -avzu --exclude-from 'exclude.tmp' lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data
-
-#echo "Fetching work from Archerdotty"
-#rsync -avzu --exclude-from 'exclude.tmp' dotty@login.archer.ac.uk:/work/e461/e461/dotty/jobs/ ~/data
-
-#echo "Fetching work from Frisc"
-#rsync -avzu --exclude-from 'exclude.tmp' pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs/ ~/data/all
-
-#echo "Fetching work from Sisu"
-#rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" --exclude-from 'exclude.tmp' pr1uycul@sisu.csc.fi:/homeappl/home/pr1uycul/jobs/ ~/data
-
+rsync -avzu lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data/
+;;
+    archerdotty)
+echo "Fetching work from Archerdotty"
+rsync -avzu --exclude-from "exclude.tmp"  dotty@login.archer.ac.uk:/work/e461/e461/dotty/jobs/ ~/data/
+;;
+    frisc)
+echo "Fetching work from Frisc"
+rsync -avzu pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs/ ~/data/
+;;
+    sisu)
+echo "Fetching work from Sisu"
+rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" pr1uycul@sisu.csc.fi:/homeappl/home/pr1uycul/jobs/ ~/data/
+;;
+    cx1)
 echo "Fetching work from cx1"
-rsync -avzu --exclude-from 'exclude.tmp' lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data
+rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
+;;
+    cx2)
+echo "Fetching work from cx2"
+rsynv -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
+;;
+    all)
+echo "Fetching work from TomTom"
+rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/Scratch/ ~/data/
+echo "Fetching work from Archerdot"
+rsync -avzu lucydot@login.archer.ac.uk:/work/e476/e476/lucydot/jobs/ ~/data/
+echo "Fetching work from Archer"
+rsync -avzu lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/ ~/data/
+echo "Fetching work from Archerdotty"
+rsync -avzu dotty@login.archer.ac.uk:/work/e461/e461/dotty/jobs/ ~/data/
+echo "Fetching work from Frisc"
+rsync -avzu pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs/ ~/data/
+echo "Fetching work from Sisu"
+rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" pr1uycul@sisu.csc.fi:/homeappl/home/pr1uycul/jobs/ ~/data/
+echo "Fetching work from cx1"
+rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
+echo "Fetching work from cx2"
+rsync -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
+echo "Pushing data to the EPSRC secure data storage"
+rsync -avzu ~/data/ archer:/epsrc/e05/e05/lucy/
+echo "Backup complete"
+;;
+esac
+
+
