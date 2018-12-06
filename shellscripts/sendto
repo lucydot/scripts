@@ -43,9 +43,11 @@ case $1 in
     ;;
     bragg) address="lucydot@129.31.136.138:/home/lucydot/jobs/" 
     ;;
-    daint) address="lwhalley@daint.cscs.ch:/users/lwhalley/jobs/"
+    daint) address="lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/"
+            identity=".ssh/curie_rsa"
+	    proxycommand="ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"
     ;;
     esac  
 ########### Send files with rsync ##############
 echo "Sending $directory to $address "
-rsync -avzu --relative -e "ssh -i \"$HOME/$identity\""  "$directory" "$address"
+rsync -avzu -e "ssh -i \"$HOME/$identity\" -o \"$proxycommand\""  "$directory" "$address"

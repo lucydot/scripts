@@ -6,7 +6,6 @@ cat > exclude.tmp <<EOF
 *WAVECAR*
 *CHGCAR*
 *CHG*
-*OSZICAR*
 EOF
 else 
     cat > exclude.tmp <<EOF
@@ -46,6 +45,10 @@ rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
 echo "Fetching work from cx2"
 rsynv -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
 ;;
+     daint)
+echo "Fetching work from daint"
+rsync -avzu --exclude-from 'exclude.tmp' -e 'ssh -o "ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"' lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/ ~/data   
+;;    
     all)
 echo "Fetching work from TomTom"
 rsync -avzu -e "ssh -i $HOME/.ssh/curie_rsa" mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/Scratch/ ~/data/
@@ -63,10 +66,12 @@ echo "Fetching work from cx1"
 rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
 echo "Fetching work from cx2"
 rsync -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
+;;
+esac
+
 echo "Pushing data to the EPSRC secure data storage"
 rsync -avzu ~/data/ archer:/epsrc/e05/e05/lucy/
 echo "Backup complete"
-;;
-esac
+
 
 

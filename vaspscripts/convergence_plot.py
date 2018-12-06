@@ -38,7 +38,7 @@ def main(begin=1, save=False, kind='electronic',filename='OUTCAR'):
     free_energies = [i for i in free_energies if i != ' ']
     free_energies = [float(i) for i in free_energies][begin-1:]
     print (free_energies)
-
+    print ("\n Number of iterations: ",len(free_energies))
     minlim, maxlim = set_axlims(np.array(free_energies), 0.05)
 
     x_coords = range(1, len(free_energies)+1)
