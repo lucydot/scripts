@@ -9,18 +9,18 @@
 # Set flags to empty
 directory= address= 
 case $2 in 
-    *) directory="/Users/lucydot/data/$2"
+    *) directory="/Users/lucydot/data/./$2"
         ;;
     esac
    # shift    # Shift arguments to examine next argument
 
 case $1 in
-    balena) address="lw827@balena.bath.ac.uk:/home/o/lw827/jobs"
-	   identity="~/.ssh/id_rsa"
-;;
+    frisc) address="pr1uycu1@login.archer.ac.uk:/work/pr1u1304/pr1u1304/pr1uycu1/jobs"
+        identity="~/.ssh/curie_rsa"
+    ;;
     cobalt) address="lucy@chpc-cobalt.bath.ac.uk:/home/lucy/jobs/"
 	   identity="~/.ssh/id_rsa"
-;;
+    ;;
     archer) address="lucy@login.archer.ac.uk:/work/e05/e05/lucy/jobs/"
        identity="~/.ssh/curie_rsa"
     ;; 
@@ -35,12 +35,19 @@ case $1 in
         ;;
     cx1) address="lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/"
     ;;
-    cx2) address="lw3016@login.cx2.hpc.imperial.ac.uk:/work/lw3016/jobs/"
-        ;;
+    cx2) address="lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/"
+    ;;
    
-    tomtom) address="mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/jobs/" 
+    tomtom) address="mmm0117@thomas.rc.ucl.ac.uk:/home/mmm0117/Scratch/" 
              identity=".ssh/curie_rsa"
+    ;;
+    bragg) address="lucydot@129.31.136.138:/home/lucydot/jobs/" 
+    ;;
+    daint) address="lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/"
+            identity=".ssh/curie_rsa"
+	    proxycommand="ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"
+    ;;
     esac  
 ########### Send files with rsync ##############
 echo "Sending $directory to $address "
-rsync -avzu -e "ssh -i \"$HOME/$identity\""  "$directory" "$address"
+rsync -avzu -e "ssh -i \"$HOME/$identity\" -o \"$proxycommand\""  "$directory" "$address"

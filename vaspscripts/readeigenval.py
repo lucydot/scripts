@@ -1,14 +1,11 @@
 #!/usr/bin/python
-# Ryan Valenza
-# 2014-10-28
-# Mod 2016-08-08 MWistey: fix regexp, replace eval->enval
-# This script is the start of a project to create a series of
-# modules to interpret VASP outfiles.  The end goal is to be able
-# to quickly create plots and format data for external use.
+# Lucy Whalley adapting Ryan Valenza
+# 2017-09
 
 import sys
 import re
 import math
+import numpy as np
 
 try:
         eigenval = open("EIGENVAL","r")
@@ -40,7 +37,8 @@ bands = []
 for i in range(int(nbands)):
     bands.append([]) 
 j = 0 # mark band number
-
+dirn = np.array([None,None,None])
+step = 0
 print "Finding k-point, energy pairs for each band..."
 for line in eigenval:
     kpt = re.match(regexs['kpt'], line)
@@ -48,9 +46,14 @@ for line in eigenval:
 
     if kpt != None:
         (kx,ky,kz) = kpt.groups()
-        k = math.sqrt(float(kx)**2 + float(ky)**2 + float(kz)**2)
-        k = k
-                                                                    
+        vector = np.array([float(kx),float(ky),float(kz)])
+        d = np.divide(vector,np.sqrt(np.dot(vector,vector)))
+        print (d)
+        if dirn.all() == None:
+            dirn = d
+        elif np.array_equal(d,dirn) is False:
+            step = max(bands[:][:][0])[0]                                                 
+        k = math.sqrt(np.dot(vector,vector)) + step
     if enval != None:
         e = float(enval.groups(0)[1])
         bands[j%int(nbands)].append([k,e])
@@ -60,9 +63,9 @@ for line in eigenval:
 # Ideas - use matplotlib to generate a bandstructure plot
 #       - numpy arrays
 print "Creating file bands.txt..."
-out = open("bands.txt", "w")
+out = open("LW_bands.txt", "w")
 for i in range(int(nbands)):
     for j in range(int(nkpts)):
-        out.write("%d %.4f %.4f\n"%(i,bands[i][j][0],bands[i][j][1]))
-
+        out.write(" %.4f %.4f\n"%(bands[i][j][0],bands[i][j][1]))
+    out.write("\n\n\n")
 
