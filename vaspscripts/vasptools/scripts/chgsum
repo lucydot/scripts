@@ -65,18 +65,6 @@ def chgsum():
         print("Error : bad arguments")
         usage(1)
         
-    print("\n\t * * * {0} * * *\n".format(args[0]))
-    # ask if you agree the computation
-    answer = ""
-    print(" {0} will compute : {1}*{2} + {3}*{4}".format(args[0], fact1, chgcar1, fact2, chgcar2))
-    while answer != "y":
-        answer = raw_input(" Do you agree ? (y/n) : ")
-        if answer == "n":
-            exit(0)
-        elif answer == "y":
-            continue
-        else:
-            print(" hit 'y' for yes or 'n' for non")
 
     # file CHGCAR exist ?
     if not os.path.exists(chgcar1):
@@ -91,17 +79,6 @@ def chgsum():
 
     # name of output file
     print("------------------------------------------------------------")
-    if os.path.exists("CHGCAR_sum"):
-        answer = ""
-        while answer != "y":
-            answer = raw_input(" file CHGCAR_sum exists, overwrite it ? (y/n) : ")
-            if answer == "n":
-                exit(0)
-            elif answer == "y":
-                continue
-            else:
-                print("hit 'y' for yes or 'n' for non")
-
     print(" write sum density in : CHGCAR_sum")
     print("------------------------------------------------------------")
 

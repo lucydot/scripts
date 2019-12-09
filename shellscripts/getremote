@@ -45,7 +45,7 @@ rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
 echo "Fetching work from cx2"
 rsynv -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
 ;;
-     daint)
+    daint)
 echo "Fetching work from daint"
 rsync -avzu --exclude-from 'exclude.tmp' -e 'ssh -o "ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"' lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/ ~/data   
 ;;    
@@ -66,6 +66,8 @@ echo "Fetching work from cx1"
 rsync -avzu lw3016@login.cx1.hpc.imperial.ac.uk:/work/lw3016/jobs/ ~/data/
 echo "Fetching work from cx2"
 rsync -avzu lw3016@login.cx2.hpc.imperial.ac.uk:/scratch/lw3016/jobs/ ~/data/
+echo "Fetching work from Daint"
+rsync -avzu --exclude-from 'exclude.tmp' -e 'ssh -o "ProxyCommand ssh -Y lwhalley@ela.cscs.ch -W %h:%p"' lwhalley@daint.cscs.ch:/scratch/snx3000/lwhalley/jobs/ ~/data
 ;;
 esac
 

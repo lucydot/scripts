@@ -41,28 +41,6 @@ def chgsplit():
 
     print("------------------------------------------------------------")
     # names of output files
-    if os.path.exists("CHGCAR_up"):
-        answer = ""
-        while answer != "y":
-            answer = raw_input(" file CHGCAR_up exists, overwrite it ? (y/n) : ")
-            if answer == "n":
-                exit(0)
-            elif answer == "y":
-                continue
-            else:
-                print("hit 'y' for yes or 'n' for non")
-
-    if os.path.exists("CHGCAR_down"):
-        answer = ""
-        while answer != "y":
-            answer = raw_input(" file CHGCAR_down exists, overwrite it ? (y/n) : ")
-            if answer == "n":
-                exit(0)
-            elif answer == "y":
-                continue
-            else:
-                print("hit 'y' for yes or 'n' for non")
-
     print(" write up density in   : CHGCAR_up")
     print(" write down density in : CHGCAR_down")
     print("------------------------------------------------------------")
