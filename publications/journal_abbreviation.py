@@ -16,7 +16,7 @@ except: print("Error: specify the file to be processed!")
 
 if not os.path.isfile('journalList.txt'):
     import urllib.request
-    urllib.request.urlretrieve("https://raw.githubusercontent.com/JabRef/jabref/master/src/main/resources/journals/journalList.txt", 
+    urllib.request.urlretrieve("https://gist.githubusercontent.com/FilipDominec/6df14b3424e335c4a47a96640f7f0df9/raw/74876d2d5df9ed60492ef3a14dc3599a6a6a9cfc/journalList.txt", 
             filename="journalList.txt")
 rulesfile = open('journalList.txt')
 
