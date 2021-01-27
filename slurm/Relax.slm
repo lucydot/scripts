@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+#SBATCH -N 10
+#SBATCH -t 72:00:00
+
+#SBATCH -J Relax
+
+#SBATCH -p small_long
+
+#SBATCH -o StdOut.%J
+#SBATCH -e StdErr.%J
+
+module swap PrgEnv-cray PrgEnv-intel/5.2.82
+
+export OMP_NUM_THREADS=1
+
+ncores=$((SLURM_NNODES*24))
+
+#aprun -n ${ncores} ${USERAPPL}/vasp.5.4.1.05Feb16/bin/vasp_gam > "vasp.out"
+python Efficientification.py

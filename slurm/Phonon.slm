@@ -1,0 +1,58 @@
+#!/bin/bash -l
+
+#SBATCH -N 22
+#SBATCH -t 1:10:00
+
+#SBATCH -J Phonon
+
+#SBATCH -p small
+
+#SBATCH -o StdOut.%J
+#SBATCH -e StdErr.%J
+
+module swap PrgEnv-cray PrgEnv-intel/5.2.82
+
+export OMP_NUM_THREADS=1
+
+batches=1
+runsPerBatch=11
+
+batchCounter=0
+
+while [ "${batchCounter}" -lt "${batches}" ]
+do
+	runCounter=0
+
+	for mposcar in `ls MPOSCAR-*`
+	do
+		dirName="${mposcar/MPOSCAR-/}"
+
+		if [ ! -d "${dirName}" ]; then
+			mkdir "${dirName}"
+
+			if [ $? -eq 0 ]; then
+				cd "${dirName}"
+
+				cp "../INCAR" .
+				cp "../KPOINTS" .
+				cp "../POTCAR" .
+
+				cp "../${mposcar}" "POSCAR"
+
+				aprun -n 48 ${USERAPPL}/vasp.5.4.1.05Feb16/bin/vasp_std > "../${dirName}.out" &
+
+				(( runCounter++ ))
+
+				cd ..
+			fi
+		fi
+
+		if [ "${runCounter}" -eq "${runsPerBatch}" ] ; then
+			break
+		fi
+	done
+
+	wait
+
+	(( batchCounter++ ))
+done
