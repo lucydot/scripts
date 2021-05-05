@@ -1,5 +1,6 @@
 #!/Applications/Julia-0.5.app/Contents/Resources/julia/bin/julia
 
+push!(LOAD_PATH, "/Users/lucy/Code/scripts/phonons/")
 using JuliaPhonons
 using JLD
 using PyCall

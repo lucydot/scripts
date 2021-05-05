@@ -47,8 +47,8 @@ def get_init_fin(i_file, f_file, disp_range=None):
     masses = np.array([spc.atomic_mass for spc in struct_i.species])
     delta_Q2 = masses[:,None] * delta_R ** 2
     
-    inorganic_delta_Q2 = delta_Q2[128:]
-    organic_delta_Q2 = delta_Q2[:128]
+    inorganic_delta_Q2 = delta_Q2[129:]
+    organic_delta_Q2 = delta_Q2[:129]
     print(np.sqrt(inorganic_delta_Q2.sum()))
 
     print(np.sqrt(delta_Q2.sum()))

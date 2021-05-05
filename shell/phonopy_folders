@@ -1,8 +1,7 @@
 #!/bin/bash
 
-for file in POSCAR-*
+for file in POSCAR_*
 do
 mkdir disp-${file:7:10}
 cp $file ./disp-${file:7:10}/${file:0:6}
-cp {POTCAR,INCAR,KPOINTS} ./disp-${file:7:10}/ 
 done

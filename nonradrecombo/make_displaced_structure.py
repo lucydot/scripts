@@ -76,7 +76,7 @@ if __name__ == '__main__':
                         help="final input file (POSCAR format) ",default="./POSCAR_f")
     parser.add_argument("-d","--disp", nargs='+',
                         help="displacement range ",
-                        default=[-1.0, -0.6, -0.4, -0.2, -0.1, 0, 0.1, 0.2, 0.4, 0.6, 1.0])
+                        default=[-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     args = parser.parse_args()
     
     i_file = args.init
